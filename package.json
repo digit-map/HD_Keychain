@@ -1,0 +1,21 @@
+{
+  "name": "@digit-map/HDKeychain",
+  "private": false,
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "repository": "https://github.com/digit-map/HD_Keychain",
+  "author": "Keith <keithwhisper@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "bn.js": "5.1.1",
+    "elliptic": "6.5.2"
+  },
+  "devDependencies": {
+    "@types/elliptic": "6.4.12",
+    "@types/node": "13.7.1",
+    "typescript": "3.7.5"
+  }
+}
