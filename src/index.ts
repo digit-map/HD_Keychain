@@ -2,20 +2,20 @@ import crypto from 'crypto'
 import { ec as EC } from 'elliptic'
 import BN from 'bn.js'
 
-const EMPTY_BUFFER = Buffer.from([])
+const EMPTY_BUFFER = new Uint8Array()
 const HARDENED_INDEX_BASE = 0x80000000
 
 const ec = new EC('secp256k1')
 
-const privKeyToPubKey = (privKey: Buffer) => {
+export const privKeyToPubKey = (privKey: Uint8Array) => {
   if (privKey.length !== 32) {
     throw new Error('Invalid private key')
   }
 
-  return Buffer.from(ec.keyFromPrivate(privKey).getPublic('hex'), 'hex')
+  return Buffer.from(ec.keyFromPrivate(privKey).getPublic(true, 'hex'), 'hex')
 }
 
-const hash160 = (data: Buffer) => {
+export const hash160 = (data: Uint8Array) => {
   const sha256 = crypto
     .createHash('sha256')
     .update(data)
@@ -27,17 +27,18 @@ const hash160 = (data: Buffer) => {
   return res
 }
 
-const derivePrivKey = (privKey: Buffer, il: Buffer) => {
+export const derivePrivKey = (privKey: Uint8Array, il: Uint8Array) => {
   const result = new BN(il)
   result.iadd(new BN(privKey))
-  if (result.cmp(ec.curve.n) > 0) {
+  if (result.cmp(ec.curve.n) >= 0) {
     result.isub(ec.curve.n)
   }
   return result.toArrayLike(Buffer, 'be', 32)
 }
 
-const derivePubKey = (pubKey: Buffer, il: Buffer) => {
+export const derivePubKey = (pubKey: Uint8Array, il: Uint8Array) => {
   const x = new BN(pubKey.slice(1)).toRed(ec.curve.red)
+  // fixed to bn.js 4.11.8
   let y = x
     .redSqr()
     .redIMul(x)
@@ -51,15 +52,15 @@ const derivePubKey = (pubKey: Buffer, il: Buffer) => {
 }
 
 export class HDKeychain {
-  privKey: Buffer = EMPTY_BUFFER
-  pubKey: Buffer = EMPTY_BUFFER
-  chainCode: Buffer = EMPTY_BUFFER
+  privKey: Uint8Array = EMPTY_BUFFER
+  pubKey: Uint8Array = EMPTY_BUFFER
+  chainCode: Uint8Array = EMPTY_BUFFER
   index: number = 0
   depth: number = 0
-  identifier: Buffer = EMPTY_BUFFER
+  identifier: Uint8Array = EMPTY_BUFFER
   fingerprint: number = 0
   parentFingerprint: number = 0
-  public static fromPublicKey = (pubKey: Buffer, chainCode: Buffer, path: string): HDKeychain => {
+  public static fromPubKey = (pubKey: Uint8Array, chainCode: Uint8Array, path: string): HDKeychain => {
     const keychain = new HDKeychain(EMPTY_BUFFER, chainCode)
     keychain.pubKey = pubKey
     keychain.calculateFingerprint()
@@ -71,7 +72,7 @@ export class HDKeychain {
     return keychain
   }
 
-  constructor(privKey: Buffer, chainCode: Buffer) {
+  constructor(privKey: Uint8Array, chainCode: Uint8Array) {
     this.privKey = privKey
     this.chainCode = chainCode
     if (!this.isNeutered()) {
@@ -85,7 +86,7 @@ export class HDKeychain {
 
   public calculateFingerprint = () => {
     this.fingerprint = hash160(this.pubKey)
-      .slice(4)
+      .slice(0, 4)
       .readUInt32BE(0)
   }
 
