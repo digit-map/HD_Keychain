@@ -59,6 +59,17 @@ export class HDKeychain {
   identifier: Buffer = EMPTY_BUFFER
   fingerprint: number = 0
   parentFingerprint: number = 0
+  public static fromPublicKey = (pubKey: Buffer, chainCode: Buffer, path: string): HDKeychain => {
+    const keychain = new HDKeychain(EMPTY_BUFFER, chainCode)
+    keychain.pubKey = pubKey
+    keychain.calculateFingerprint()
+
+    const pathComponents = path.split('/')
+    keychain.depth = pathComponents.length - 1
+    keychain.index = parseInt(pathComponents[pathComponents.length - 1], 10)
+
+    return keychain
+  }
 
   constructor(privKey: Buffer, chainCode: Buffer) {
     this.privKey = privKey

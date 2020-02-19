@@ -38,4 +38,8 @@ jspm_packages
 Contact GitHub API Training Shop Blog About
 
 # Build
+build
 lib
+
+# Playground
+index.html

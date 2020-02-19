@@ -1,13 +1,17 @@
 {
-  "name": "@digit-map/HDKeychain",
+  "name": "@digit-map/hd-keychain",
   "private": false,
-  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.1.2",
   "main": "lib/index.js",
   "repository": "https://github.com/digit-map/HD_Keychain",
   "author": "Keith <keithwhisper@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "bundle": "webpack"
   },
   "dependencies": {
     "bn.js": "5.1.1",
@@ -16,6 +20,10 @@
   "devDependencies": {
     "@types/elliptic": "6.4.12",
     "@types/node": "13.7.1",
-    "typescript": "3.7.5"
+    "ts-loader": "6.2.1",
+    "tslib": "1.10.0",
+    "typescript": "3.7.5",
+    "webpack": "4.41.6",
+    "webpack-cli": "3.3.11"
   }
 }
