@@ -1,5 +1,12 @@
 {
   "name": "@digit-map/hd-keychain",
+  "keywords": [
+    "hd",
+    "keychain",
+    "blockchain",
+    "bip32",
+    "bip39"
+  ],
   "private": false,
   "publishConfig": {
     "access": "public"
