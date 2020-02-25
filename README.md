@@ -1,6 +1,6 @@
 # HD_Keychain
 
-![npm (scoped)](https://img.shields.io/npm/v/@digit-map/hd-keychain)
+![npm (scoped)](https://img.shields.io/npm/v/@digit-map/hd-keychain) [![codecov](https://codecov.io/gh/digit-map/HD_Keychain/branch/master/graph/badge.svg)](https://codecov.io/gh/digit-map/HD_Keychain)
 
 HD Keychain for HD wallets comply with BIP32, BIP39
 
