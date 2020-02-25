@@ -9,7 +9,12 @@ module.exports = {
   module: {
     rules: [{
       test: /\.ts$/,
-      use: 'ts-loader',
+      use: {
+        loader: 'ts-loader',
+        options: {
+          configFile: 'tsconfig.prod.json'
+        }
+      },
       exclude: /node_modules/,
     }, ],
   },
@@ -18,7 +23,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'lib'),
+    path: path.resolve(__dirname, 'lib', 'umd'),
     libraryTarget: 'umd',
     library: 'HDKeychain',
     globalObject: 'globalThis',
