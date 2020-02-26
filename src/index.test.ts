@@ -13,7 +13,7 @@ describe('main', () => {
       expected: '70dd83756f8b610363b54328d79e85931fc8e598d51cf73f19fd502d76b18508',
     }
     const actual = derivePrivKey(Buffer.from(fixture.sk, 'hex'), Buffer.from(fixture.factor, 'hex'))
-    expect(actual.toString('hex')).toBe(fixture.expected)
+    expect(Buffer.from(actual).toString('hex')).toBe(fixture.expected)
   })
 
   test('derive public key from master public key and factor', () => {

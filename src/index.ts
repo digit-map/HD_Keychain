@@ -11,8 +11,7 @@ export const privKeyToPubKey = (privKey: Uint8Array) => {
   if (privKey.length !== 32) {
     throw new Error('Invalid private key')
   }
-
-  return Buffer.from(ec.keyFromPrivate(privKey).getPublic(true, 'hex'), 'hex')
+  return new Uint8Array(ec.keyFromPrivate(privKey).getPublic(true, 'array'))
 }
 
 export const hash160 = (data: Uint8Array) => {
@@ -33,7 +32,7 @@ export const derivePrivKey = (privKey: Uint8Array, il: Uint8Array) => {
   if (result.cmp(ec.curve.n) >= 0) {
     result.isub(ec.curve.n)
   }
-  return result.toArrayLike(Buffer, 'be', 32)
+  return new Uint8Array(result.toArray('be', 32))
 }
 
 export const derivePubKey = (pubKey: Uint8Array, il: Uint8Array) => {
@@ -92,14 +91,15 @@ export class HDKeychain {
 
   public deriveChild = (index: number = 0, hardened: boolean = false) => {
     let data = EMPTY_BUFFER
-    const indexBuffer = Buffer.allocUnsafe(4)
+    const indexBuffer = new ArrayBuffer(4)
+    const idxDv = new DataView(indexBuffer)
     if (hardened) {
-      const privKey = Buffer.concat([Buffer.alloc(1, 0), this.privKey])
-      indexBuffer.writeUInt32BE(index + HARDENED_INDEX_BASE, 0)
-      data = Buffer.concat([privKey, indexBuffer])
+      const privKey = new Uint8Array([0, ...this.privKey])
+      idxDv.setUint32(0, index + HARDENED_INDEX_BASE, false)
+      data = new Uint8Array([...privKey, ...new Uint8Array(indexBuffer)])
     } else {
-      indexBuffer.writeUInt32BE(index, 0)
-      data = Buffer.concat([this.pubKey, indexBuffer])
+      idxDv.setUint32(0, index, false)
+      data = new Uint8Array([...this.pubKey, ...new Uint8Array(indexBuffer)])
     }
 
     const i = crypto

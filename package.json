@@ -11,7 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "repository": "https://github.com/digit-map/HD_Keychain",
   "author": "Keith <keithwhisper@gmail.com>",
